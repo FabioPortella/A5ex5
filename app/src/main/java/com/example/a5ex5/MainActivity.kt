@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     // ao clicar no botao PAR ou IMPAR estes botões vicam invisiveis,
     // para evitar do usuário clicar novamente e não fazer nada.
     // Ao clicar no botão NOVO JOGO, este botão fica invisivel e o PAR e IMPAR visiveis
+    // Title recebe a informação de GANHOU ou PERDEU.
     fun jogada(view: View){
         if(resultado % 2 == view.tag.toString().toInt())
              {
