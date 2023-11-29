@@ -1,5 +1,6 @@
 package com.example.a5ex5
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -13,17 +14,26 @@ class MainActivity : AppCompatActivity() {
     private var score = 0
     lateinit var txtResultado: TextView
     lateinit var btnNovo: Button
+    lateinit var btnPar: Button
+    lateinit var btnImpar: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Inicialização do Shared Preferences
+        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE) ?: return
+        score = sharedPref.getInt("SCORE", 0)
+
+
         // iniciando componentes da UI
         txtResultado = findViewById(R.id.txtResultado)
         btnNovo = findViewById(R.id.btnNovo)
+        btnPar = findViewById(R.id.btnPar)
+        btnImpar = findViewById(R.id.btnImpar)
 
-        // dispara a funçao na inicialização
+        // dispara novoJogo na inicialização
         novoJogo()
     }
 
@@ -31,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         txtResultado.text = "Par ou Impar"
         resultado = Random.nextInt(from = 0, until = 10)
         btnNovo.visibility = View.INVISIBLE
+        btnImpar.visibility = View.VISIBLE
+        btnPar.visibility = View.VISIBLE
     }
 
     fun novoJogo(view: View) {
@@ -39,11 +51,21 @@ class MainActivity : AppCompatActivity() {
 
     fun jogada(view: View){
         if(resultado % 2 == view.tag.toString().toInt())
-            if (btnNovo.visibility == View.INVISIBLE)
+             {
                 score++
-        title = "Score: $score"
-        txtResultado.text = "$resultado"
+                getPreferences(MODE_PRIVATE).edit().putInt("SCORE", score).commit()
+                btnImpar.visibility = View.INVISIBLE
+                btnPar.visibility = View.INVISIBLE
+                title = "Score: $score  -  Ganhou"
+            }
+        else
+        {
+            btnImpar.visibility = View.INVISIBLE
+            btnPar.visibility = View.INVISIBLE
+            title = "Score: $score  -  Perdeu"
+        }
 
+        txtResultado.text = "$resultado"
         btnNovo.visibility = View.VISIBLE
     }
 }
